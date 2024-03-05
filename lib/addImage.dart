@@ -86,46 +86,80 @@ class _addImageState extends State<addImage> {
           ),
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _imageFile != null
-                  ? Image.file(_imageFile!)
-                  : Text('No image selected.'),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _pickImage,
-                child: Text('Choose Image'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _imageFile != null
+                ? Image.file(_imageFile!)
+                : Text('No image selected.'),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _pickImage,
+              child: Text('Choose Image'),
+            ),
+            SizedBox(height: 20),
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Title",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  TextField(
+                    controller: titlController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      hintText: 'title',
+                      labelStyle: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold, // ขนาดข้อความ Label Text
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 20),
-              TextField(
-                controller: titlController,
-                decoration: InputDecoration(
-                  labelText: 'titl',
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Details",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Colors.black87,
+              ),
+            ),
+            TextField(
+              controller: detailController,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                hintText: 'Details',
+                labelStyle: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold, // ขนาดข้อความ Label Text
                 ),
               ),
-              SizedBox(height: 20),
-              TextField(
-                controller: detailController,
-                decoration: InputDecoration(
-                  labelText: 'Details',
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _uploadImage();
-                  topicCollection.add({
-                    'title': titlController.text,
-                    'conversation': detailController.text
-                  });
-                },
-                child: Text('Upload Image'),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _uploadImage();
+                topicCollection.add({
+                  'title': titlController.text,
+                  'conversation': detailController.text
+                });
+              },
+              child: Text('Upload Image'),
+            ),
+          ],
         ),
       ),
     );

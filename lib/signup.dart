@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:milktea/main.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,23 +22,33 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     void signUserUp() async {
       showDialog(
-          context: context,
-          builder: (builder) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          });
-      try {
-        if (passwordController.text == confirmPasswordController.text) {
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text,
+        context: context,
+        builder: (builder) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
+        },
+      );
+      try {
+        // เรียกใช้ Firebase Authentication เพื่อตรวจสอบอีเมล
+        var userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        if (userCredential.user != null) {
+          // ลงทะเบียนสำเร็จ
+          print('ลงทะเบียนสำเร็จ: ${userCredential.user!.email}');
         } else {
-          print('Password don\'t math');
+          print('ไม่สามารถลงทะเบียนได้');
         }
       } on FirebaseAuthException catch (e) {
-        print(e.message);
+        if (e.code == 'email-already-in-use') {
+          print('มีผู้ใช้งานอีเมลนี้แล้ว');
+        } else {
+          print('เกิดข้อผิดพลาด: ${e.message}');
+        }
       }
       Navigator.pop(context);
     }
@@ -97,25 +108,27 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             SizedBox(height: 5),
                             TextFormField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 10,
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 10,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) return 'กรุณากรอก email';
-                              },
-                            ),
+                                validator: MultiValidator([
+                                  EmailValidator(
+                                      errorText: "กรุณากรอกรูปเเบบให้ถูกต้อง"),
+                                  RequiredValidator(
+                                      errorText: "กรุณากรอกข้อมูล")
+                                ])),
                             SizedBox(height: 30),
                           ],
                         ),
@@ -136,24 +149,27 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             SizedBox(height: 5),
                             TextFormField(
-                              controller: passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 10,
+                                controller: passwordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 10,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.grey),
+                                  ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) return 'กรุณากรอกรหัสผ่าน';
-                              },
-                            ),
+                                validator: MultiValidator([
+                                  RequiredValidator(
+                                      errorText: "กรุณากรอกข้อมูล"),
+                                  MinLengthValidator(6,
+                                      errorText:
+                                          "กรุณากรอกpasswordให้ครบ6ตัวอักษร"),
+                                ])),
                             SizedBox(height: 30),
                           ],
                         ),
@@ -189,8 +205,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                               ),
                               validator: (value) {
-                                if (value!.isEmpty)
-                                  return 'กรุณากรอกรหัสยืนยัน';
+                                if (value!.isEmpty) return "กรุณากรอกข้อมูล";
+                                if (value.length < 6)
+                                  return "กรุณากรอกpasswordให้ครบ6ตัวอักษร";
+                                if (value != passwordController.text)
+                                  return "กรุณากรอกข้อมูลให้ตรงกัน";
                               },
                             ),
                             SizedBox(height: 30),
@@ -220,7 +239,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: Text(
-                    "Sign In",
+                    "Sign Up",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 30,
