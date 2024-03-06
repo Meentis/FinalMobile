@@ -16,6 +16,7 @@ class _addImageState extends State<addImage> {
   User? _user;
   final titlController = TextEditingController();
   final detailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   CollectionReference topicCollection =
       FirebaseFirestore.instance.collection('topic');
@@ -36,7 +37,11 @@ class _addImageState extends State<addImage> {
   // Function สำหรับเลือกรูปภาพจากแกลเลอรี่
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    final pickedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 300, // กำหนดความสูงสูงสุดของรูปภาพ
+      maxWidth: 250, // กำหนดความกว้างสูงสุดของรูปภาพ
+    );
 
     setState(() {
       if (pickedImage != null) {
@@ -63,103 +68,214 @@ class _addImageState extends State<addImage> {
       final Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(
           'images/${_user!.email}/$imageName-${DateTime.now().millisecondsSinceEpoch}.png');
 
-      await firebaseStorageRef.putFile(_imageFile!);
+      final TaskSnapshot uploadTask =
+          await firebaseStorageRef.putFile(_imageFile!);
+      final String imageUrl = await uploadTask.ref.getDownloadURL();
 
       print('Image uploaded to Firebase Storage.');
+
+      // เพิ่มข้อมูลลงใน Firestore
+      await topicCollection.add({
+        'title': titlController.text,
+        'detail': detailController.text,
+        'imageUrl': imageUrl, // เพิ่ม URL รูปภาพลงใน Firestore
+        'email': _user!.email,
+      });
+
+      print('Image URL added to Firestore.');
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  void _showUploading() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context)
+              .pop(true); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
+        });
+        return AlertDialog(
+          title: Text("กำลังอัปโหลดรูปภาพ"),
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("กรุณารอสักครู่..."),
+            ],
+          ),
+        );
+      },
+    ).then((value) {
+      Navigator.of(context)
+          .pop(); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
+    });
+    ;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload Image to Firebase Storage'),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              _getUser();
-            },
-            icon: Icon(Icons.logout),
-          ),
-        ],
+        title: Center(
+          child: Text('Upload Image '),
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 226, 145),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _imageFile != null
-                ? Image.file(_imageFile!)
-                : Text('No image selected.'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Choose Image'),
-            ),
-            SizedBox(height: 20),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Title",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  TextField(
-                    controller: titlController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 10,
+        child: Container(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20),
+                            _imageFile != null
+                                ? Image.file(_imageFile!)
+                                : Text('No image selected.'),
+                            SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: _pickImage,
+                              child: Text(
+                                'Choose Image',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Color.fromARGB(255, 255, 226, 145),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "ชื่อ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: titlController,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 10,
+                                      ),
+                                      hintText:
+                                          'บอกผู้อื่นว่ารูปภาพของคุณชื่ออะไร',
+                                      labelStyle: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight
+                                              .bold // ขนาดข้อความ Label Text
+                                          ),
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return "กรุณาเพิ่มชื่อรูปภาพ";
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 20),
+                                  Text(
+                                    "คำอธิบาย",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: detailController,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      hintText:
+                                          'เพิ่มคำอธิบายที่กับรูปภาพของคุณ',
+                                      labelStyle: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight
+                                            .bold, // ขนาดข้อความ Label Text
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value!.isEmpty)
+                                        return "กรุณาเพิ่มคำอธิบายรูปภาพ";
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  if (_imageFile == null) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text("แจ้งเตือน"),
+                                          content: Text("กรุณาเพิ่มรูปภาพ"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("ตกลง"),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    _showUploading();
+                                    _uploadImage();
+                                  }
+                                }
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Color.fromARGB(255, 255, 226, 145),
+                                ), // เปลี่ยนสีปุ่มเป็นสีน้ำเงิน
+                              ),
+                              child: Text(
+                                'Upload Image',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      hintText: 'title',
-                      labelStyle: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold, // ขนาดข้อความ Label Text
-                      ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Details",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                color: Colors.black87,
-              ),
-            ),
-            TextField(
-              controller: detailController,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                hintText: 'Details',
-                labelStyle: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold, // ขนาดข้อความ Label Text
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _uploadImage();
-                topicCollection.add({
-                  'title': titlController.text,
-                  'conversation': detailController.text
-                });
-              },
-              child: Text('Upload Image'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

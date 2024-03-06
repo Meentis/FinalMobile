@@ -66,14 +66,6 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text(
-                    "Login",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                ],
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Form(
