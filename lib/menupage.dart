@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:milktea/addImage.dart';
 import 'package:milktea/editProfil.dart';
+import 'package:milktea/main.dart';
 
 class MenuPage extends StatefulWidget {
   final int screenIndex1;
@@ -99,23 +100,35 @@ class home extends StatelessWidget {
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => profilePage()));
-              },
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: 36,
-              ),
-            ),
-          )
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 20.0),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         Navigator.push(context,
+        //             MaterialPageRoute(builder: (context) => profilePage()));
+        //       },
+        //       child: Icon(
+        //         Icons.person,
+        //         color: Colors.black,
+        //         size: 36,
+        //       ),
+        //     ),
+        //   )
+        // ],
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+          ),
+        ),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('topic').snapshots(),
@@ -178,7 +191,6 @@ class home extends StatelessWidget {
 //------------- profile Page -------------
 class profilePage extends StatefulWidget {
   const profilePage({Key? key}) : super(key: key);
-
   @override
   _profilePageState createState() => _profilePageState();
 }
@@ -195,23 +207,19 @@ class _profilePageState extends State<profilePage> {
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => profilePage()));
-              },
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: 36,
-              ),
-            ),
-          )
-        ],
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+          ),
+        ),
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
