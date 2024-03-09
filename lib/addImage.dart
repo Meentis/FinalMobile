@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:milktea/menupage.dart';
 
 class addImage extends StatefulWidget {
   @override
@@ -108,8 +109,13 @@ class _addImageState extends State<addImage> {
         );
       },
     ).then((value) {
-      Navigator.of(context)
-          .pop(); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MenuPage(
+                  screenIndex1: 1,
+                )),
+      ); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
     });
     ;
   }

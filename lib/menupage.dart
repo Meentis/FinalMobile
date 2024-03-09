@@ -4,10 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:milktea/addImage.dart';
-import 'package:milktea/profile.dart';
+import 'package:milktea/editProfil.dart';
 
 class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+  final int screenIndex1;
+  const MenuPage({Key? key, required this.screenIndex1}) : super(key: key);
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -23,33 +24,14 @@ class _MenuPageState extends State<MenuPage> {
     profilePage(),
   ];
 
+  void initState() {
+    super.initState();
+    screenIndex = widget.screenIndex1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Menu',
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => profilePage()));
-              },
-              child: Icon(
-                Icons.person,
-                color: Colors.black,
-                size: 36,
-              ),
-            ),
-          )
-        ],
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
-      ),
       body: mobileScreens[screenIndex],
       bottomNavigationBar: Container(
         height: 60,
@@ -111,6 +93,30 @@ class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Home',
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => profilePage()));
+              },
+              child: Icon(
+                Icons.person,
+                color: Colors.black,
+                size: 36,
+              ),
+            ),
+          )
+        ],
+        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('topic').snapshots(),
         builder: (context, snapshot) {
@@ -183,6 +189,191 @@ class _profilePageState extends State<profilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile',
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => profilePage()));
+              },
+              child: Icon(
+                Icons.person,
+                color: Colors.black,
+                size: 36,
+              ),
+            ),
+          )
+        ],
+        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+      ),
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser?.uid)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            Map<String, dynamic>? userData =
+                snapshot.data?.data() as Map<String, dynamic>?;
+
+            String imageUrl = userData?['image'] ?? '';
+
+            return Column(
+              children: [
+                SizedBox(height: 15),
+                Center(
+                  child: Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 4, color: Colors.white),
+                      boxShadow: [
+                        BoxShadow(
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(0.1),
+                        )
+                      ],
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: imageUrl.isNotEmpty
+                            ? NetworkImage(imageUrl)
+                            : AssetImage("img/profile.png") as ImageProvider,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        userData?['username'] ?? "",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(userData?['email'] ?? ""),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          "3",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "POST",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "200",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "FOLLOWING",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "1600",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "LIKE",
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                        side: BorderSide.none,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      child: Text(
+                        "Edit Profile",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(

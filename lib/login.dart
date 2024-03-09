@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:milktea/forgotpassword.dart';
 import 'package:milktea/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:milktea/menupage.dart';
@@ -24,20 +23,32 @@ class _LoginPageState extends State<LoginPage> {
               child: CircularProgressIndicator(),
             );
           });
+
       try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
-        );
+        )
+            .then((_) {
+          // เนื่องจากล็อกอินสำเร็จเท่านั้น จึงทำการนำทางไปยังหน้าโปรไฟล์
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MenuPage(
+                      screenIndex1: 0,
+                    )),
+          );
+        });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          print('No user found for that email');
-        } else if (e.code == 'worng-password') {
-          print('Wrong password provided for that user');
+          print('ไม่พบผู้ใช้สำหรับอีเมลนี้');
+        } else if (e.code == 'wrong-password') {
+          print('รหัสผ่านไม่ถูกต้องสำหรับผู้ใช้นี้');
         }
+        // ปิดกล่องโหลดเมื่อการล็อกอินล้มเหลว
+        Navigator.pop(context);
       }
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MenuPage()));
     }
 
     return Scaffold(
@@ -45,18 +56,6 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -66,6 +65,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Column(
+                children: [
+                  Text(
+                    "Login",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                ],
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Form(
@@ -149,13 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  forgotPasswordPage()));
-                                    },
+                                    onTap: () {},
                                     child: Text('Forgot Password?')),
                               ],
                             ),
