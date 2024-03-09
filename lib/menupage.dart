@@ -18,7 +18,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final Random random = Random();
-
+  bool isFavorite = true;
   int screenIndex = 0;
   final mobileScreens = [
     home(),
@@ -89,46 +89,38 @@ class _MenuPageState extends State<MenuPage> {
 }
 
 //------------- Home page -------------
-class home extends StatelessWidget {
+class home extends StatefulWidget {
   const home({super.key});
+
+  @override
+  State<home> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<home> {
+  bool isFavorite = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Home',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 20.0),
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         Navigator.push(context,
-        //             MaterialPageRoute(builder: (context) => profilePage()));
-        //       },
-        //       child: Icon(
-        //         Icons.person,
-        //         color: Colors.black,
-        //         size: 36,
-        //       ),
-        //     ),
-        //   )
-        // ],
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 20,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout_outlined),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              // เพิ่มโค้ดที่ต้องการเมื่อกดปุ่มค้นหา
+            },
           ),
-        ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('topic').snapshots(),
@@ -170,12 +162,19 @@ class home extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: Icon(
-                      Icons.favorite_rounded,
-                      color: Colors.white,
-                      size: 36,
+                    bottom: 1,
+                    right: 1,
+                    child: IconButton(
+                      icon: isFavorite
+                          ? Icon(Icons.favorite, color: Colors.red)
+                          : Icon(Icons.favorite_border),
+                      onPressed: () {
+                        setState(() {
+                          // สลับค่าเมื่อปุ่มถูกกด
+                          isFavorite = !isFavorite;
+                        });
+                      },
+                      iconSize: 30,
                     ),
                   ),
                 ],
@@ -184,6 +183,17 @@ class home extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => addImage()),
+          );
+        },
+        label: Icon(Icons.add_photo_alternate),
+        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
@@ -202,24 +212,25 @@ class _profilePageState extends State<profilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Profile',
           style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 20,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout_outlined),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              // เพิ่มโค้ดที่ต้องการเมื่อกดปุ่มค้นหา
+            },
           ),
-        ),
+        ],
       ),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
@@ -381,16 +392,6 @@ class _profilePageState extends State<profilePage> {
             );
           }
         },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => addImage()),
-          );
-        },
-        label: Icon(Icons.add_photo_alternate),
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
       ),
     );
   }

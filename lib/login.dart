@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:milktea/forgotpassword.dart';
 import 'package:milktea/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:milktea/menupage.dart';
@@ -156,7 +157,13 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 GestureDetector(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  forgotPasswordPage()));
+                                    },
                                     child: Text('Forgot Password?')),
                               ],
                             ),
