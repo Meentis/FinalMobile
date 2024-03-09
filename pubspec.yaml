@@ -41,6 +41,8 @@ dependencies:
   image_picker: ^1.0.7
   firebase_storage: ^11.6.7
   form_field_validator: ^1.1.0
+  flutter_staggered_grid_view: ^0.4.0
+  flutter_masonry_view: ^0.0.2
 
 
 dev_dependencies:

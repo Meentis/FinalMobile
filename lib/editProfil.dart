@@ -16,7 +16,6 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final formKey = GlobalKey<FormState>();
   TextEditingController usernameController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
   TextEditingController captionController = TextEditingController();
 
   File? image;
@@ -39,7 +38,6 @@ class _EditProfileState extends State<EditProfile> {
 
       setState(() {
         usernameController.text = userDoc['username'] ?? '';
-        nameController.text = userDoc['name'] ?? '';
         captionController.text = userDoc['caption'] ?? '';
         imageUrl = userDoc['image'] ?? "";
       });
@@ -49,7 +47,6 @@ class _EditProfileState extends State<EditProfile> {
   void editProfile() async {
     if (formKey.currentState!.validate()) {
       String newUsername = usernameController.text;
-      String newName = nameController.text;
       String newCaption = captionController.text;
       User? user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -73,7 +70,6 @@ class _EditProfileState extends State<EditProfile> {
         // อัปเดตข้อมูลใน Firestore
         FirebaseFirestore.instance.collection("users").doc(userId).update({
           "username": newUsername,
-          "name": newName,
           "caption": newCaption,
           "image": imageUrl, // ให้ใช้ URL ของรูปภาพที่อัปโหลด
         }).then((_) {
@@ -115,7 +111,10 @@ class _EditProfileState extends State<EditProfile> {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => profilePage()),
+              MaterialPageRoute(
+                  builder: (context) => MenuPage(
+                        screenIndex1: 1,
+                      )),
             );
           },
           icon: Icon(
@@ -230,6 +229,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: 5),
                         TextFormField(
+                          maxLength: 30,
                           controller: captionController,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(
