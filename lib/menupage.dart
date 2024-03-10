@@ -7,6 +7,7 @@ import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:milktea/addImage.dart';
 import 'package:milktea/editProfil.dart';
 import 'package:milktea/main.dart';
+import 'package:milktea/userpoast.dart';
 
 class MenuPage extends StatefulWidget {
   final int screenIndex1;
@@ -19,7 +20,7 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final User? user = FirebaseAuth.instance.currentUser;
   final Random random = Random();
-  bool isFavorite = true;
+
   int screenIndex = 0;
   final mobileScreens = [
     home(),
@@ -51,6 +52,38 @@ class _MenuPageState extends State<MenuPage> {
                 },
                 icon: Icon(
                   Icons.home,
+                  //------ ถ้า Index = 0 ให้ไอคอนสีเหลือง ถ้าไม่ใช้ไอคอนสีขาว ------
+                  color: screenIndex == 0
+                      ? Color.fromRGBO(254, 254, 254, 1) // สีขาวเมื่อถูกเลือก
+                      : const Color.fromARGB(
+                          255, 172, 169, 169), // สีเทาเมื่อไม่ได้เลือก
+                  // color: Colors.white,
+                )),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    //------ กำหนดค่า Index เมื่อมีการคลิก ------
+                    screenIndex = 0;
+                  });
+                },
+                icon: Icon(
+                  Icons.edit,
+                  //------ ถ้า Index = 0 ให้ไอคอนสีเหลือง ถ้าไม่ใช้ไอคอนสีขาว ------
+                  color: screenIndex == 0
+                      ? Color.fromRGBO(254, 254, 254, 1) // สีขาวเมื่อถูกเลือก
+                      : const Color.fromARGB(
+                          255, 172, 169, 169), // สีเทาเมื่อไม่ได้เลือก
+                  // color: Colors.white,
+                )),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    //------ กำหนดค่า Index เมื่อมีการคลิก ------
+                    screenIndex = 0;
+                  });
+                },
+                icon: Icon(
+                  Icons.favorite,
                   //------ ถ้า Index = 0 ให้ไอคอนสีเหลือง ถ้าไม่ใช้ไอคอนสีขาว ------
                   color: screenIndex == 0
                       ? Color.fromRGBO(254, 254, 254, 1) // สีขาวเมื่อถูกเลือก
@@ -117,11 +150,32 @@ class _MyWidgetState extends State<home> {
           IconButton(
             icon: Icon(Icons.logout_outlined),
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('คุณต้องการออกหรือไม่?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // ปิดกล่องข้อความ
+                        },
+                        child: Text('ยกเลิก'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการออก
+                        },
+                        child: Text('ออก'),
+                      ),
+                    ],
+                  );
+                },
               );
-              // เพิ่มโค้ดที่ต้องการเมื่อกดปุ่มค้นหา
             },
           ),
         ],
@@ -162,241 +216,238 @@ class profilePage extends StatefulWidget {
   _profilePageState createState() => _profilePageState();
 }
 
-class _profilePageState extends State<profilePage> {
-  final User? user = FirebaseAuth.instance.currentUser;
+//SingleTickerProviderStateMixin ช่วยในการสร้าง Animation หรือการควบคุมการเลื่อนหน้าจอ ทำให้ State นี้สามารถใช้ TabController
+class _profilePageState extends State<profilePage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            'Profile',
-            style: TextStyle(color: Colors.black),
-          ),
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 255, 226, 145),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.logout_outlined),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
-                // เพิ่มโค้ดที่ต้องการเมื่อกดปุ่มค้นหา
-              },
-            ),
-          ],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Profile',
+          style: TextStyle(color: Colors.black),
         ),
-        body: SingleChildScrollView(
-          child: FutureBuilder<DocumentSnapshot>(
-            future: FirebaseFirestore.instance
-                .collection('users')
-                .doc(FirebaseAuth.instance.currentUser?.uid)
-                .get(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                Map<String, dynamic>? userData =
-                    snapshot.data?.data() as Map<String, dynamic>?;
-
-                String imageUrl = userData?['image'] ?? '';
-
-                return Column(
-                  children: [
-                    SizedBox(height: 15),
-                    Center(
-                      child: Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 4, color: Colors.white),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 2,
-                              blurRadius: 10,
-                              color: Colors.black.withOpacity(0.1),
-                            )
-                          ],
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: imageUrl.isNotEmpty
-                                ? NetworkImage(imageUrl)
-                                : AssetImage("img/profile.png")
-                                    as ImageProvider,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Center(
-                      child: Column(
-                        children: [
-                          Text(
-                            userData?['username'] ?? "",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          Text(userData?['email'] ?? ""),
-                          Text(
-                            userData?['caption'] ?? "ไม่มี caption",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                "3",
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "POST",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "1",
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                "LIKE",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 226, 145),
-                            side: BorderSide.none,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                          child: Text(
-                            "Edit Profile",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Picture",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('topic')
-                            .where('email',
-                                isEqualTo:
-                                    FirebaseAuth.instance.currentUser?.email)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                          if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          }
-                          final List<DocumentSnapshot> documents =
-                              snapshot.data!.docs;
-                          final List<String> imageUrls = documents
-                              .map((doc) => doc['imageUrl'] as String)
-                              .toList();
-
-                          if (imageUrls.isEmpty) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical:
-                                        40), // เพิ่มระยะห่างตามแนวตั้งที่นี่
-                                child: Text('ยังไม่มีรูปภาพ'),
-                              ),
-                            );
-                          }
-
-                          return MasonryView(
-                            listOfItem: imageUrls,
-                            numberOfColumn: 2,
-                            itemBuilder: (item) {
-                              return Image.network(item);
-                            },
-                          );
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout_outlined),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('คุณต้องการออกหรือไม่?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // ปิดกล่องข้อความ
                         },
+                        child: Text('ยกเลิก'),
                       ),
-                    )
-                  ],
-                );
-              }
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการออก
+                        },
+                        child: Text('ออก'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
-        ));
+        ],
+      ),
+      resizeToAvoidBottomInset: false,
+      body: FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser?.uid)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            Map<String, dynamic>? userData =
+                snapshot.data?.data() as Map<String, dynamic>?;
+
+            String imageUrl = userData?['image'] ?? '';
+
+            return Column(
+              children: [
+                SizedBox(height: 15),
+                Center(
+                  child: Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 4, color: Colors.white),
+                      boxShadow: [
+                        BoxShadow(
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(0.1),
+                        )
+                      ],
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: imageUrl.isNotEmpty
+                            ? NetworkImage(imageUrl)
+                            : AssetImage("img/profile.png") as ImageProvider,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        userData?['username'] ?? "",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      Text(userData?['email'] ?? ""),
+                      Text(
+                        userData?['caption'] ?? "ไม่มี caption",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            "3",
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "POST",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            "1600",
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "LIKE",
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 60.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfile()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                        side: BorderSide.none,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                      child: Text(
+                        "Edit Profile",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: TabBar(
+                      controller: _tabController,
+                      indicatorColor: Colors.amber,
+                      tabs: [
+                        Tab(
+                          icon: Icon(
+                            Icons.post_add,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Tab(
+                          icon: Icon(Icons.favorite, color: Colors.black),
+                        )
+                      ]),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  height: 355,
+                  child: TabBarView(
+                      controller: _tabController,
+                      children: [UserPost(), UserPost()]),
+                )
+              ],
+            );
+          }
+        },
+      ),
+    );
   }
 }

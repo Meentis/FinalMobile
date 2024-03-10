@@ -28,8 +28,7 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child:
-              Text('Example Firebase', style: TextStyle(color: Colors.white)),
+          child: Text('Forgot Password', style: TextStyle(color: Colors.black)),
         ),
         actions: [Icon(Icons.help, color: Colors.white)],
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
