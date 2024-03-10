@@ -210,6 +210,10 @@ class _EditProfileState extends State<EditProfile> {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                           ),
+                          validator: (value) {
+                            if (value!.isEmpty)
+                              return 'Please input your username';
+                          },
                         ),
                         SizedBox(height: 30),
                       ],

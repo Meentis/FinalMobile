@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masonry_view/flutter_masonry_view.dart';
+import 'package:masonry_grid/masonry_grid.dart';
 import 'package:milktea/addImage.dart';
-import 'package:milktea/editProfil.dart';
+import 'package:milktea/editprofil.dart';
+import 'package:milktea/imagedetails.dart';
 import 'package:milktea/main.dart';
 import 'package:milktea/userpoast.dart';
 
@@ -23,7 +25,7 @@ class _MenuPageState extends State<MenuPage> {
 
   int screenIndex = 0;
   final mobileScreens = [
-    home(),
+    Home(),
     profilePage(),
   ];
 
@@ -126,15 +128,14 @@ class _MenuPageState extends State<MenuPage> {
 }
 
 //------------- Home page -------------
-class home extends StatefulWidget {
-  const home({super.key});
+class Home extends StatefulWidget {
+  const Home({Key? key});
 
   @override
-  State<home> createState() => _MyWidgetState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyWidgetState extends State<home> {
-  bool isFavorite = true;
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -195,12 +196,34 @@ class _MyWidgetState extends State<home> {
               .toList(); // รับ URL ของรูปภาพจาก documents
 
           return SingleChildScrollView(
-            child: MasonryView(
-              listOfItem: imageUrls,
-              numberOfColumn: 2,
-              itemBuilder: (item) {
-                return Image.network(item);
-              },
+            child: MasonryGrid(
+              column: 2,
+              children: imageUrls.map((imageUrl) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0), // ระยะห่างระหว่างรูปภาพ
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageDetailPage(
+                            imageUrl: imageUrl,
+                          ),
+                        ),
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(10), // ปรับขอบรูปภาพให้โค้ง
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit
+                            .cover, // ทำให้รูปภาพปรับตามขนาดของพื้นที่ที่กำหนด
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           );
         },
@@ -334,7 +357,7 @@ class _profilePageState extends State<profilePage>
                       ),
                       Text(userData?['email'] ?? ""),
                       Text(
-                        userData?['caption'] ?? "ไม่มี caption",
+                        userData?['caption'] ?? "",
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -438,7 +461,7 @@ class _profilePageState extends State<profilePage>
                 ),
                 Container(
                   width: double.maxFinite,
-                  height: 355,
+                  height: 353,
                   child: TabBarView(
                       controller: _tabController,
                       children: [UserPost(), UserPost()]),

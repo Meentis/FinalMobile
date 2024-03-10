@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         )
             .then((_) {
           // เนื่องจากล็อกอินสำเร็จเท่านั้น จึงทำการนำทางไปยังหน้าโปรไฟล์
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MenuPage(
