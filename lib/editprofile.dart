@@ -83,7 +83,7 @@ class _EditProfileState extends State<EditProfile> {
           context,
           MaterialPageRoute(
               builder: (context) => MenuPage(
-                    screenIndex1: 1,
+                    screenIndex1: 2,
                   )),
         );
       }
@@ -268,13 +268,6 @@ class _EditProfileState extends State<EditProfile> {
                       child: ElevatedButton(
                         onPressed: () {
                           formKey.currentState?.reset();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MenuPage(
-                                      screenIndex1: 1,
-                                    )),
-                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 255, 226, 145),

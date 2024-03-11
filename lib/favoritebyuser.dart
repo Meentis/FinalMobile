@@ -23,7 +23,7 @@ class UserFavorie extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('favorite')
-            .where('your_email', isEqualTo: user.email)
+            .where('liked_by', arrayContains: user.email)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
