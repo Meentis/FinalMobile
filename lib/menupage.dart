@@ -535,6 +535,7 @@ class _ProfilePageState extends State<ProfilePage>
   }
 }
 
+//------------- ManageImage   -------------
 class ManageImage extends StatefulWidget {
   const ManageImage({Key? key}) : super(key: key);
   @override
@@ -751,6 +752,7 @@ class _ManageImageState extends State<ManageImage> {
   }
 }
 
+//------------- UserFavorite  -------------
 class _UserFavorie extends StatelessWidget {
   _UserFavorie({Key? key}) : super(key: key);
 
