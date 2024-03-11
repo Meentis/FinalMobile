@@ -35,7 +35,6 @@ class _addImageState extends State<addImage> {
     });
   }
 
-  late String userName = '';
   // Function สำหรับเลือกรูปภาพจากแกลเลอรี่
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -76,58 +75,17 @@ class _addImageState extends State<addImage> {
 
       print('Image uploaded to Firebase Storage.');
 
-      // Fetch user data from Firestore
-      String userName = '';
-      try {
-        DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_user!.uid)
-            .get();
-        if (userSnapshot.exists) {
-          userName = userSnapshot['username'];
-        } else {
-          print('User data not found');
-        }
-      } catch (e) {
-        print('Error fetching user data: $e');
-      }
-
       // Add image data to Firestore
       await topicCollection.add({
         'title': titlController.text,
         'detail': detailController.text,
         'imageUrl': imageUrl,
         'email': _user!.email,
-        'username': userName, // Add username to the data
       });
 
       print('Image URL added to Firestore.');
     } catch (e) {
       print(e.toString());
-    }
-  }
-
-  Future<void> fetchUserData() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        String userId = user.uid;
-        DocumentSnapshot snapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .get();
-
-        if (snapshot.exists) {
-          setState(() {
-            userName = snapshot['username'];
-          });
-        } else {
-          print('User data not found');
-        }
-      }
-    } catch (e) {
-      print('Error fetching user data: $e');
-      // Handle error gracefully, show a snackbar or retry option
     }
   }
 

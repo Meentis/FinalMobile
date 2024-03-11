@@ -30,7 +30,6 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
         title: Center(
           child: Text('Forgot Password', style: TextStyle(color: Colors.black)),
         ),
-        actions: [Icon(Icons.help, color: Colors.white)],
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
       ),
       body: Container(

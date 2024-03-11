@@ -45,8 +45,9 @@ class _SignUpPageState extends State<SignUpPage> {
             .set({
           'username': usernameController.text,
           'email': userCredential.user!.email,
-          "caption": null,
-          "image": null
+          "caption": '',
+          "image":
+              'https://firebasestorage.googleapis.com/v0/b/milktea-13bba.appspot.com/o/profile.png?alt=media&token=dd3912db-c907-4541-a396-c0102b5a34e6'
           // เพิ่มข้อมูลผู้ใช้อื่น ๆ ตามต้องการ
         });
       } else {

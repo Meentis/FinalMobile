@@ -78,15 +78,6 @@ class _EditProfileState extends State<EditProfile> {
           "image": imageUrl, // ให้ใช้ URL ของรูปภาพที่อัปโหลด
         });
 
-        // อัปเดตชื่อผู้ใช้ในตาราง "topic"
-        QuerySnapshot topicSnapshot = await FirebaseFirestore.instance
-            .collection("topic")
-            .where("email", isEqualTo: user.email)
-            .get();
-        for (QueryDocumentSnapshot doc in topicSnapshot.docs) {
-          await doc.reference.update({"username": newUsername});
-        }
-
         print("อัปเดตข้อมูลสำเร็จ");
         Navigator.pushReplacement(
           context,

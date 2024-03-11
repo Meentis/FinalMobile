@@ -13,19 +13,20 @@ class ImageDetailPage extends StatefulWidget {
 
 class _ImageDetailPageState extends State<ImageDetailPage> {
   late String title = 'Title';
-  late String detail = '';
-  late String userEmail = '';
-
-  bool isFavorite = true;
-  late String userName = '';
   late String caption = '';
-  late String profileImage =
-      'https://firebasestorage.googleapis.com/v0/b/milktea-13bba.appspot.com/o/profile.png?alt=media&token=dd3912db-c907-4541-a396-c0102b5a34e6';
+  late String userEmail = '';
+  bool isFavorite = false; // ตั้งค่าเริ่มต้นให้ไม่ได้ถูกไลค์
+  late String username = '';
+  late String detail = '';
+  late String profileimage = '';
+  bool isLoading =
+      true; // เพิ่มตัวแปร isLoading เพื่อตรวจสอบว่ากำลังโหลดข้อมูลหรือไม่
 
   @override
   void initState() {
     super.initState();
     fetchImageData();
+    fetchUserData();
   }
 
   Future<void> fetchImageData() async {
@@ -39,16 +40,44 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
         DocumentSnapshot snapshot = querySnapshot.docs.first;
         setState(() {
           title = snapshot['title'];
-          detail = snapshot['detail'];
+          detail = snapshot['detail']; // เพิ่มการรับค่า caption จาก Firestore
           userEmail = snapshot['email'];
-          userName = snapshot['username'];
-          // เรียกใช้ฟังก์ชันเพื่อตรวจสอบว่าภาพนี้เป็น favorite หรือไม่
-          checkIfFavorite();
+          // เพิ่มการรับค่าโปรไฟล์ผู้ใช้จาก Firestore
+          fetchUserData(); // เรียกเมท็อดเพื่อดึงข้อมูลโปรไฟล์ผู้ใช้
         });
       }
     } catch (e) {
       print('Error fetching image data: $e');
-      // Handle error gracefully, show a snackbar or retry option
+    }
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: userEmail)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot snapshot = querySnapshot.docs.first;
+        String? email = snapshot['email'];
+        print('Email from Firestore: $email');
+        if (email != null) {
+          setState(() {
+            profileimage = snapshot['image'];
+            username = snapshot['username'];
+
+            userEmail = email;
+            isLoading =
+                false; // ตั้งค่า isLoading เป็น false เมื่อโหลดข้อมูลเสร็จสิ้น
+          });
+          await checkIfFavorite(); // เรียกเมท็อดเพื่อตรวจสอบว่ารูปภาพถูกไลค์หรือไม่
+        } else {
+          print('Error: Email is null');
+        }
+      }
+    } catch (e) {
+      print('Error fetching image data: $e');
     }
   }
 
@@ -57,6 +86,9 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('favorite')
           .where('imageUrl', isEqualTo: widget.imageUrl)
+          .where('your_email',
+              isEqualTo: FirebaseAuth.instance.currentUser!
+                  .email) // ตรวจสอบโดยใช้อีเมลของผู้ใช้ที่ล็อกอิน
           .get();
 
       setState(() {
@@ -67,23 +99,28 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
     }
   }
 
+  Future<void> toggleLike() async {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+    if (isFavorite) {
+      await addToFavorites();
+    } else {
+      await removeFromFavorites();
+    }
+  }
+
   Future<void> addToFavorites() async {
     try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await FirebaseFirestore.instance.collection('favorite').add({
-          'imageUrl': widget.imageUrl,
-          'title': title,
-          'detail': detail,
-          'email': userEmail,
-          'username': userName,
-          'your_email': user.email, // ใช้อีเมลของผู้ใช้ที่ล็อกอินอยู่
-          // เพิ่มข้อมูลอื่น ๆ ที่ต้องการเก็บในตาราง favorite
-        });
-        setState(() {
-          isFavorite = true;
-        });
-      }
+      await FirebaseFirestore.instance.collection('favorite').add({
+        'imageUrl': widget.imageUrl,
+        'title': title,
+        'detail': detail,
+        'email': userEmail,
+        'your_email': FirebaseAuth
+            .instance.currentUser!.email, // ใช้อีเมลของผู้ใช้ที่ล็อกอินอยู่
+        // เพิ่มข้อมูลอื่น ๆ ที่ต้องการเก็บในตาราง favorite
+      });
     } catch (e) {
       print('Error adding image to favorites: $e');
     }
@@ -94,14 +131,13 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('favorite')
           .where('imageUrl', isEqualTo: widget.imageUrl)
-          .limit(1) // จำกัดให้ลบเพียงหนึ่งเรคคอร์ด
+          .where('your_email',
+              isEqualTo: FirebaseAuth.instance.currentUser!.email)
+          .limit(1)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
         querySnapshot.docs.first.reference.delete();
-        setState(() {
-          isFavorite = false;
-        });
       }
     } catch (e) {
       print('Error removing image from favorites: $e');
@@ -115,73 +151,76 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
         title: Text("Details"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 400,
-              width: 400,
-              child: Image.network(
-                widget.imageUrl,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Column(
               children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Detail: $detail',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundImage: NetworkImage(profileImage),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 400,
+                    width: 400,
+                    child: Image.network(
+                      widget.imageUrl,
+                      fit: BoxFit.cover,
                     ),
-                    SizedBox(width: 13),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          userName.isNotEmpty ? userName : 'Loading...',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Detail: $detail',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(profileimage),
                           ),
-                        ),
-                        Text(
-                          userEmail,
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed:
-                          isFavorite ? removeFromFavorites : addToFavorites,
-                      icon: isFavorite
-                          ? Icon(Icons.favorite, color: Colors.red)
-                          : Icon(Icons.favorite_border),
-                    )
-                  ],
+                          SizedBox(width: 13),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                username,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                userEmail,
+                                style:
+                                    TextStyle(fontSize: 16, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                          Spacer(),
+                          IconButton(
+                            onPressed: toggleLike,
+                            icon: isFavorite
+                                ? Icon(Icons.favorite, color: Colors.red)
+                                : Icon(Icons.favorite_border),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
