@@ -7,6 +7,7 @@ import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:masonry_grid/masonry_grid.dart';
 import 'package:milktea/addImage.dart';
 import 'package:milktea/editprofil.dart';
+import 'package:milktea/favoriteimage.dart';
 import 'package:milktea/imagedetails.dart';
 import 'package:milktea/main.dart';
 import 'package:milktea/userpoast.dart';
@@ -464,7 +465,7 @@ class _profilePageState extends State<profilePage>
                   height: 353,
                   child: TabBarView(
                       controller: _tabController,
-                      children: [UserPost(), UserPost()]),
+                      children: [UserPost(), UserFavorie()]),
                 )
               ],
             );

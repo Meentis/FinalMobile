@@ -39,7 +39,8 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         usernameController.text = userDoc['username'] ?? '';
         captionController.text = userDoc['caption'] ?? '';
-        imageUrl = userDoc['image'] ?? "";
+        imageUrl = userDoc['image'] ??
+            "https://firebasestorage.googleapis.com/v0/b/milktea-13bba.appspot.com/o/profile.png?alt=media&token=dd3912db-c907-4541-a396-c0102b5a34e6";
       });
     }
   }
@@ -67,23 +68,33 @@ class _EditProfileState extends State<EditProfile> {
           }
         }
 
-        // อัปเดตข้อมูลใน Firestore
-        FirebaseFirestore.instance.collection("users").doc(userId).update({
+        // อัปเดตข้อมูลใน Firestore ในตาราง "users"
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .update({
           "username": newUsername,
           "caption": newCaption,
           "image": imageUrl, // ให้ใช้ URL ของรูปภาพที่อัปโหลด
-        }).then((_) {
-          print("อัปเดตข้อมูลสำเร็จ");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MenuPage(
-                      screenIndex1: 1,
-                    )),
-          );
-        }).catchError((error) {
-          print("เกิดข้อผิดพลาดในการอัปเดตข้อมูล: $error");
         });
+
+        // อัปเดตชื่อผู้ใช้ในตาราง "topic"
+        QuerySnapshot topicSnapshot = await FirebaseFirestore.instance
+            .collection("topic")
+            .where("email", isEqualTo: user.email)
+            .get();
+        for (QueryDocumentSnapshot doc in topicSnapshot.docs) {
+          await doc.reference.update({"username": newUsername});
+        }
+
+        print("อัปเดตข้อมูลสำเร็จ");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MenuPage(
+                    screenIndex1: 1,
+                  )),
+        );
       }
     }
   }

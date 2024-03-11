@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,17 +13,19 @@ class ImageDetailPage extends StatefulWidget {
 
 class _ImageDetailPageState extends State<ImageDetailPage> {
   late String title = 'Title';
-  late String caption = '';
-  late String userProfile = '';
-  bool isFavorite = true;
-  late String username = '';
   late String detail = '';
-  late String profileimage = '';
+  late String userEmail = '';
+
+  bool isFavorite = true;
+  late String userName = '';
+  late String caption = '';
+  late String profileImage =
+      'https://firebasestorage.googleapis.com/v0/b/milktea-13bba.appspot.com/o/profile.png?alt=media&token=dd3912db-c907-4541-a396-c0102b5a34e6';
+
   @override
   void initState() {
     super.initState();
     fetchImageData();
-    fetchUserData();
   }
 
   Future<void> fetchImageData() async {
@@ -36,37 +39,72 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
         DocumentSnapshot snapshot = querySnapshot.docs.first;
         setState(() {
           title = snapshot['title'];
-          detail = snapshot['detail']; // เพิ่มการรับค่า caption จาก Firestore
-          userProfile = snapshot['email'];
-          // เพิ่มการรับค่าโปรไฟล์ผู้ใช้จาก Firestore
-          fetchUserData(); // เรียกเมท็อดเพื่อดึงข้อมูลโปรไฟล์ผู้ใช้
+          detail = snapshot['detail'];
+          userEmail = snapshot['email'];
+          userName = snapshot['username'];
+          // เรียกใช้ฟังก์ชันเพื่อตรวจสอบว่าภาพนี้เป็น favorite หรือไม่
+          checkIfFavorite();
         });
       }
     } catch (e) {
       print('Error fetching image data: $e');
+      // Handle error gracefully, show a snackbar or retry option
     }
   }
 
-  Future<void> fetchUserData() async {
+  Future<void> checkIfFavorite() async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('email', isEqualTo: userProfile)
+          .collection('favorite')
+          .where('imageUrl', isEqualTo: widget.imageUrl)
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        DocumentSnapshot snapshot = querySnapshot.docs.first;
+      setState(() {
+        isFavorite = querySnapshot.docs.isNotEmpty;
+      });
+    } catch (e) {
+      print('Error checking if image is favorite: $e');
+    }
+  }
+
+  Future<void> addToFavorites() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('favorite').add({
+          'imageUrl': widget.imageUrl,
+          'title': title,
+          'detail': detail,
+          'email': userEmail,
+          'username': userName,
+          'your_email': user.email, // ใช้อีเมลของผู้ใช้ที่ล็อกอินอยู่
+          // เพิ่มข้อมูลอื่น ๆ ที่ต้องการเก็บในตาราง favorite
+        });
         setState(() {
-          profileimage = snapshot['image'];
-          username = snapshot['username'];
-          caption = snapshot['caption']; // เพิ่มการรับค่า caption จาก Firestore
-          userProfile =
-              snapshot['email']; // เพิ่มการรับค่าโปรไฟล์ผู้ใช้จาก Firestore
-          print('$username');
+          isFavorite = true;
         });
       }
     } catch (e) {
-      print('Error fetching image data: $e');
+      print('Error adding image to favorites: $e');
+    }
+  }
+
+  Future<void> removeFromFavorites() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('favorite')
+          .where('imageUrl', isEqualTo: widget.imageUrl)
+          .limit(1) // จำกัดให้ลบเพียงหนึ่งเรคคอร์ด
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        querySnapshot.docs.first.reference.delete();
+        setState(() {
+          isFavorite = false;
+        });
+      }
+    } catch (e) {
+      print('Error removing image from favorites: $e');
     }
   }
 
@@ -102,7 +140,7 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  'Detail: $detail', // แสดงคำอธิบายรูปภาพ
+                  'Detail: $detail',
                   style: TextStyle(fontSize: 20),
                 ),
                 SizedBox(height: 10),
@@ -110,36 +148,33 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(profileimage),
+                      backgroundImage: NetworkImage(profileImage),
                     ),
                     SizedBox(width: 13),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          username,
+                          userName.isNotEmpty ? userName : 'Loading...',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          userProfile, // แสดงโปรไฟล์ผู้ใช้
+                          userEmail,
                           style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       ],
                     ),
                     Spacer(),
                     IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isFavorite = !isFavorite;
-                        });
-                      },
+                      onPressed:
+                          isFavorite ? removeFromFavorites : addToFavorites,
                       icon: isFavorite
-                          ? Icon(Icons.favorite_border)
-                          : Icon(Icons.favorite, color: Colors.red),
-                    ),
+                          ? Icon(Icons.favorite, color: Colors.red)
+                          : Icon(Icons.favorite_border),
+                    )
                   ],
                 ),
               ],

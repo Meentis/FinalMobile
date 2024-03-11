@@ -5,8 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:masonry_grid/masonry_grid.dart';
 import 'package:milktea/imagedetails.dart';
 
-class UserPost extends StatelessWidget {
-  UserPost({Key? key}) : super(key: key);
+class UserFavorie extends StatelessWidget {
+  UserFavorie({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,10 @@ class UserPost extends StatelessWidget {
 
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('topic').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('favorite')
+            .where('your_email', isEqualTo: user.email)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -35,15 +38,14 @@ class UserPost extends StatelessWidget {
           final List<String> imageUrls = documents
               .where((doc) =>
                   doc['imageUrl'] != null &&
-                  doc['imageUrl'] != "" &&
-                  doc['email'] == user.email) // กรองตามอีเมลของผู้ใช้
+                  doc['imageUrl'] != "") // ตรวจสอบว่ามี URL รูปภาพหรือไม่
               .map((doc) => doc['imageUrl'] as String)
               .toList();
 
           if (imageUrls.isEmpty) {
-            // ไม่พบรูปภาพสำหรับผู้ใช้นี้
+            // ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้
             return Center(
-              child: Text('ไม่พบรูปภาพสำหรับผู้ใช้นี้'),
+              child: Text('ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้'),
             );
           }
 

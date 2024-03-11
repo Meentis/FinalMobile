@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:milktea/login.dart';
 import 'package:milktea/main.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -16,9 +15,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final emailController = TextEditingController();
   final usernameController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   final confirmPasswordController = TextEditingController();
 
   void signUserUp() async {
@@ -48,7 +45,6 @@ class _SignUpPageState extends State<SignUpPage> {
             .set({
           'username': usernameController.text,
           'email': userCredential.user!.email,
-          "name": null,
           "caption": null,
           "image": null
           // เพิ่มข้อมูลผู้ใช้อื่น ๆ ตามต้องการ
