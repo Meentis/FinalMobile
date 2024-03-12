@@ -45,7 +45,7 @@ class UserFavorie extends StatelessWidget {
           if (imageUrls.isEmpty) {
             // ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้
             return Center(
-              child: Text('ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้'),
+              child: Text('No favorite images were found for this user'),
             );
           }
 

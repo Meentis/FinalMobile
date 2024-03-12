@@ -85,7 +85,7 @@ class _EditProfileState extends State<EditProfile> {
               builder: (context) => MenuPage(
                     screenIndex1: 2,
                   )),
-        );
+        ); // เ
       }
     }
   }
@@ -102,6 +102,28 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
+  void _showUploading() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context)
+              .pop(true); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
+        });
+        return AlertDialog(
+          title: Text("Uploading image"),
+          content: Row(
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Loading..."),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
               context,
               MaterialPageRoute(
                   builder: (context) => MenuPage(
-                        screenIndex1: 1,
+                        screenIndex1: 2,
                       )),
             );
           },
@@ -136,7 +158,8 @@ class _EditProfileState extends State<EditProfile> {
                     width: 130,
                     height: 130,
                     decoration: BoxDecoration(
-                      border: Border.all(width: 4, color: Colors.white),
+                      border: Border.all(
+                          width: 4, color: Color.fromARGB(255, 255, 226, 145)),
                       boxShadow: [
                         BoxShadow(
                           spreadRadius: 2,
@@ -181,85 +204,87 @@ class _EditProfileState extends State<EditProfile> {
             SizedBox(
               height: 30,
             ),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Username",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        TextFormField(
-                          controller: usernameController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Username",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Colors.black87,
                             ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty)
-                              return 'Please input your username';
-                          },
-                        ),
-                        SizedBox(height: 30),
-                      ],
+                          SizedBox(height: 5),
+                          TextFormField(
+                            controller: usernameController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Enter your username',
+                              labelStyle: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                  ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Please enter your username';
+                            },
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Caption",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        TextFormField(
-                          maxLength: 30,
-                          controller: captionController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Caption",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Colors.black87,
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30),
-                      ],
+                          SizedBox(height: 5),
+                          TextFormField(
+                            maxLength: 30,
+                            controller: captionController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Enter your caption',
+                              labelStyle: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                  ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                ],
+                  ],
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
                 children: [
                   Expanded(
@@ -289,6 +314,7 @@ class _EditProfileState extends State<EditProfile> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          _showUploading();
                           editProfile();
                         },
                         style: ElevatedButton.styleFrom(

@@ -98,12 +98,12 @@ class _addImageState extends State<addImage> {
               .pop(true); // เมื่อกระบวนการอัปโหลดเสร็จสิ้น ให้ปิด AlertDialog
         });
         return AlertDialog(
-          title: Text("กำลังอัปโหลดรูปภาพ"),
+          title: Text("Uploading image"),
           content: Row(
             children: [
               CircularProgressIndicator(),
               SizedBox(width: 20),
-              Text("กรุณารอสักครู่..."),
+              Text("Loading..."),
             ],
           ),
         );
@@ -248,7 +248,7 @@ class _addImageState extends State<addImage> {
                                               style: TextStyle(fontSize: 29)),
                                           content: Text(
                                             "Please add a image",
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 15),
                                           ),
                                           actions: [
                                             TextButton(

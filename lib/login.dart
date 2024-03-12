@@ -103,15 +103,16 @@ class _LoginPageState extends State<LoginPage> {
                                   vertical: 10,
                                   horizontal: 10,
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
+                                hintText: 'Enter your email',
+                                labelStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight
+                                        .bold // ขนาดข้อความ Label Text
+                                    ),
                               ),
                               validator: (value) {
-                                if (value!.isEmpty) return 'กรุณากรอก email';
+                                if (value!.isEmpty)
+                                  return 'Please enter your email';
                               },
                             ),
                             SizedBox(height: 30),
@@ -132,7 +133,6 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 5),
                             TextFormField(
                               controller: passwordController,
                               obscureText: true,
@@ -141,15 +141,16 @@ class _LoginPageState extends State<LoginPage> {
                                   vertical: 10,
                                   horizontal: 10,
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
+                                hintText: 'Enter your password',
+                                labelStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight
+                                        .bold // ขนาดข้อความ Label Text
+                                    ),
                               ),
                               validator: (value) {
-                                if (value!.isEmpty) return 'กรุณากรอกรหัสผ่าน';
+                                if (value!.isEmpty)
+                                  return 'Please enter your password';
                               },
                             ),
                             SizedBox(height: 10),

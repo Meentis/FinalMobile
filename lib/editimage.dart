@@ -114,85 +114,89 @@ class _EditImageState extends State<EditImage> {
             SizedBox(
               height: 30,
             ),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Title",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        TextFormField(
-                          controller: titleController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Title",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Colors.black87,
                             ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty)
-                              return 'Please input your title';
-                          },
-                        ),
-                        SizedBox(height: 30),
-                      ],
+                          TextFormField(
+                            controller: titleController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Tell others what your iamge is called',
+                              labelStyle: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                  ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Please input your title';
+                            },
+                          ),
+                          SizedBox(height: 30),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Detail",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        TextFormField(
-                          maxLength: 30,
-                          controller: detailController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Detail",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Colors.black87,
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30),
-                      ],
+                          TextFormField(
+                            maxLength: 30,
+                            controller: detailController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Add a detail to your iamge',
+                              labelStyle: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                  ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return "Please add a detail to the iamge";
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                ],
+                    SizedBox(height: 30),
+                  ],
+                ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
                 children: [
                   Expanded(

@@ -102,6 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ),
+              SizedBox(height: 40),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Form(
@@ -121,7 +122,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 5),
                             TextFormField(
                                 controller: emailController,
                                 keyboardType: TextInputType.emailAddress,
@@ -131,12 +131,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                     vertical: 10,
                                     horizontal: 10,
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
+                                  hintText: 'Enter your Email',
+                                  labelStyle: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight
+                                          .bold // ขนาดข้อความ Label Text
+                                      ),
                                 ),
                                 validator: MultiValidator([
                                   EmailValidator(
@@ -162,7 +162,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 5),
                             TextFormField(
                                 controller: usernameController,
                                 obscureText: false,
@@ -171,12 +170,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                     vertical: 10,
                                     horizontal: 10,
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
+                                  hintText: 'Enter your username',
+                                  labelStyle: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight
+                                          .bold // ขนาดข้อความ Label Text
+                                      ),
                                 ),
                                 validator: RequiredValidator(
                                     errorText: "Please specify username.")),
@@ -197,7 +196,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 5),
                             TextFormField(
                                 controller: passwordController,
                                 obscureText: true,
@@ -206,12 +204,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                     vertical: 10,
                                     horizontal: 10,
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
+                                  hintText: 'Enter your password',
+                                  labelStyle: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight
+                                          .bold // ขนาดข้อความ Label Text
+                                      ),
                                 ),
                                 validator: MultiValidator([
                                   RequiredValidator(
@@ -238,7 +236,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.black87,
                               ),
                             ),
-                            SizedBox(height: 5),
                             TextFormField(
                               controller: confirmPasswordController,
                               obscureText: true,
@@ -247,12 +244,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                   vertical: 10,
                                   horizontal: 10,
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
+                                hintText: 'Enter your confirm password',
+                                labelStyle: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight
+                                        .bold // ขนาดข้อความ Label Text
+                                    ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty)

@@ -681,6 +681,9 @@ class _ManageImageState extends State<ManageImage> {
           }
           final List<DocumentSnapshot> documents = snapshot.data!.docs;
 
+          if (documents.isEmpty) {
+            return Center(child: Text('No images found for this user'));
+          }
           return ListView.builder(
             itemCount: documents.length,
             itemBuilder: (context, index) {
@@ -794,7 +797,7 @@ class _UserFavorie extends StatelessWidget {
     if (user == null) {
       // ไม่ได้ล็อคอิน
       return Center(
-        child: Text('กรุณาล็อคอินเพื่อดูรูปภาพ'),
+        child: Text('Please login to view pictures.'),
       );
     }
 
@@ -866,7 +869,7 @@ class _UserFavorie extends StatelessWidget {
           if (imageUrls.isEmpty) {
             // ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้
             return Center(
-              child: Text('ไม่พบรูปภาพที่ถูกใจสำหรับผู้ใช้นี้'),
+              child: Text('No favorite images were found for this user'),
             );
           }
 

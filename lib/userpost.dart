@@ -43,7 +43,7 @@ class UserPost extends StatelessWidget {
           if (imageUrls.isEmpty) {
             // ไม่พบรูปภาพสำหรับผู้ใช้นี้
             return Center(
-              child: Text('ไม่พบรูปภาพสำหรับผู้ใช้นี้'),
+              child: Text('No images found for this user'),
             );
           }
 

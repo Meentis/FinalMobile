@@ -49,10 +49,15 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
                 controller: emailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Your email',
+                  labelText: 'Email',
+                  hintText: 'Enter your email',
+                  labelStyle: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold // ขนาดข้อความ Label Text
+                      ),
                 ),
                 validator: (value) {
-                  if (value!.isEmpty) return 'กรุณากรอก email';
+                  if (value!.isEmpty) return 'Please enter your email';
                 },
               ),
               SizedBox(height: 20),
