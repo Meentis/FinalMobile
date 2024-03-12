@@ -191,13 +191,13 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
         title: Text("Details"),
         centerTitle: true,
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
+      body: Container(
+        margin: EdgeInsets.all(20),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Container(
                     height: 400,
                     width: 400,
                     child: Image.network(
@@ -205,79 +205,79 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Detail: $detail',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundImage: NetworkImage(profileimage),
-                          ),
-                          SizedBox(width: 13),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                username,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Detail: $detail',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(profileimage),
+                            ),
+                            SizedBox(width: 13),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  username,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                userEmail,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          IconButton(
-                            onPressed: toggleLike,
-                            icon: isFavorite
-                                ? Icon(Icons.favorite, color: Colors.red)
-                                : Icon(Icons.favorite_border),
-                          ),
-                          FutureBuilder<int>(
-                            key: UniqueKey(), // เพิ่ม key ที่เป็น UniqueKey()
-                            future: fetchLikeCount(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return Text(
-                                  'Liked by: ${snapshot.data}',
-                                  style: TextStyle(fontSize: 16),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                                Text(
+                                  userEmail,
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            IconButton(
+                              onPressed: toggleLike,
+                              icon: isFavorite
+                                  ? Icon(Icons.favorite, color: Colors.red)
+                                  : Icon(Icons.favorite_border),
+                            ),
+                            FutureBuilder<int>(
+                              key: UniqueKey(), // เพิ่ม key ที่เป็น UniqueKey()
+                              future: fetchLikeCount(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  return Text(
+                                    'Liked by: ${snapshot.data}',
+                                    style: TextStyle(fontSize: 16),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }
