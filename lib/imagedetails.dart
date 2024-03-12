@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:milktea/menupage.dart';
 
 class ImageDetailPage extends StatefulWidget {
   final String imageUrl;
@@ -188,96 +191,150 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Details"),
+        title: Text("Details",style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
         centerTitle: true,
-      ),
-      body: Container(
-        margin: EdgeInsets.all(20),
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Container(
-                    height: 400,
-                    width: 400,
-                    child: Image.network(
-                      widget.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+        leading: IconButton(
+            
+            icon: Icon(Icons.arrow_back_ios_new_sharp,color: Color.fromARGB(255, 255, 255, 255),),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MenuPage(screenIndex1: 1,
+                      
+                    )
                   ),
-                  SizedBox(height: 20),
+                );// Handle menu button press
+             },
+          ),
+        
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
+      ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.all(15.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Detail: $detail',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(profileimage),
-                            ),
-                            SizedBox(width: 13),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 2.0,
+                            ), // เพิ่มสีพื้นหลังสีเหลือง
+                            borderRadius: BorderRadius.circular(
+                                15), // เพิ่มเส้นขอบของ Container
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
                               children: [
-                                Text(
-                                  username,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage:
+                                          NetworkImage(profileimage),
+                                    ),
+                                    SizedBox(width: 13),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          username,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          userEmail,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Color.fromARGB(
+                                                  255, 136, 124, 124)),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 7),
+                                Container(
+                                  height: 500,
+                                  width: 400,
+                                  child: Image.network(
+                                    widget.imageUrl,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                Text(
-                                  userEmail,
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.grey),
-                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween, // จัดซ้าย
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start, // จัดซ้ายภายใน Column
+                                      children: [
+                                        Text(
+                                          title,
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          ' $detail',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            onPressed: toggleLike,
+                                            icon: isFavorite
+                                                ? Icon(Icons.favorite,
+                                                    color: Colors.red)
+                                                : Icon(Icons.favorite_border),
+                                          ),
+                                          FutureBuilder<int>(
+                                            key: UniqueKey(),
+                                            future: fetchLikeCount(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator();
+                                              } else if (snapshot.hasError) {
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              } else {
+                                                return Text(
+                                                  'Liked by: ${snapshot.data}',
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
-                            Spacer(),
-                            IconButton(
-                              onPressed: toggleLike,
-                              icon: isFavorite
-                                  ? Icon(Icons.favorite, color: Colors.red)
-                                  : Icon(Icons.favorite_border),
-                            ),
-                            FutureBuilder<int>(
-                              key: UniqueKey(), // เพิ่ม key ที่เป็น UniqueKey()
-                              future: fetchLikeCount(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  return Text(
-                                    'Liked by: ${snapshot.data}',
-                                    style: TextStyle(fontSize: 16),
-                                  );
-                                }
-                              },
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-      ),
+            ),
     );
   }
 }

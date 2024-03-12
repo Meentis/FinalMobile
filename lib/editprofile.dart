@@ -129,9 +129,14 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Edit Profile"),
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        title: Text("Edit Profile",style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                            color: Color.fromARGB(221, 255, 255, 255),
+                          ),),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         leading: IconButton(
+          color: Color.fromARGB(255, 255, 255, 255),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -148,6 +153,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: Container(
+        color: Color.fromARGB(255, 1, 37, 66),
         padding: EdgeInsets.only(left: 15, top: 20, right: 15),
         child: ListView(
           children: [
@@ -158,13 +164,12 @@ class _EditProfileState extends State<EditProfile> {
                     width: 130,
                     height: 130,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 4, color: Color.fromARGB(255, 255, 226, 145)),
+                      border: Border.all(width: 4, color: Colors.white),
                       boxShadow: [
                         BoxShadow(
                           spreadRadius: 2,
                           blurRadius: 10,
-                          color: Colors.black.withOpacity(0.1),
+                          color: const Color.fromARGB(255, 255, 253, 253).withOpacity(0.1),
                         )
                       ],
                       shape: BoxShape.circle,
@@ -218,23 +223,24 @@ class _EditProfileState extends State<EditProfile> {
                             "Username",
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                              color: Colors.black87,
+                              fontSize: 20,
+                               color: Color.fromARGB(221, 255, 255, 255),
                             ),
                           ),
                           SizedBox(height: 5),
                           TextFormField(
-                            controller: usernameController,
+                            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),                            controller: usernameController,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 10,
                               ),
                               hintText: 'Enter your username',
-                              labelStyle: TextStyle(
-                                  fontSize: 15,
+                              hintStyle: TextStyle(
+                                color:Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 12,
                                   fontWeight:
-                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                      FontWeight.w400 // ขนาดข้อความ Label Text
                                   ),
                             ),
                             validator: (value) {
@@ -254,12 +260,13 @@ class _EditProfileState extends State<EditProfile> {
                             "Caption",
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                              color: Colors.black87,
+                              fontSize: 20,
+                              color: Color.fromARGB(225, 255, 255, 255),
                             ),
                           ),
                           SizedBox(height: 5),
                           TextFormField(
+                            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                             maxLength: 30,
                             controller: captionController,
                             decoration: InputDecoration(
@@ -268,10 +275,11 @@ class _EditProfileState extends State<EditProfile> {
                                 horizontal: 10,
                               ),
                               hintText: 'Enter your caption',
-                              labelStyle: TextStyle(
-                                  fontSize: 15,
+                              hintStyle: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 12,
                                   fontWeight:
-                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                      FontWeight.w400 // ขนาดข้อความ Label Text
                                   ),
                             ),
                           ),
@@ -295,7 +303,7 @@ class _EditProfileState extends State<EditProfile> {
                           formKey.currentState?.reset();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
@@ -303,7 +311,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         child: Text(
                           "CANCEL",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                         ),
                       ),
                     ),
@@ -318,7 +326,7 @@ class _EditProfileState extends State<EditProfile> {
                           editProfile();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                          backgroundColor: Color.fromARGB(255, 255, 255, 255),
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
@@ -326,7 +334,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         child: Text(
                           "EDIT",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Color.fromARGB(255, 5, 5, 5)),
                         ),
                       ),
                     ),

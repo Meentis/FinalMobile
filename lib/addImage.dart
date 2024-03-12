@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:milktea/menupage.dart';
+import 'package:milktea/main.dart';
 
 class addImage extends StatefulWidget {
   @override
@@ -126,10 +127,24 @@ class _addImageState extends State<addImage> {
       appBar: AppBar(
         title: Text(
           'Upload Image',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
+        leading: IconButton(
+            color: Color.fromARGB(255, 255, 255, 255),
+            icon: Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MenuPage(screenIndex1: 2,
+                      
+                    )
+                  ),
+                );// Handle menu button press
+             },
+          ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -149,18 +164,18 @@ class _addImageState extends State<addImage> {
                             SizedBox(height: 20),
                             _imageFile != null
                                 ? Image.file(_imageFile!)
-                                : Text('No image selected.'),
+                                : Text('No image selected.',style:TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
                             SizedBox(height: 20),
                             ElevatedButton(
                               onPressed: _pickImage,
                               child: Text(
                                 'Choose Image',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                               ),
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 255, 226, 145),
+                                  Color.fromARGB(255, 255, 255, 255),
                                 ),
                               ),
                             ),
@@ -173,8 +188,8 @@ class _addImageState extends State<addImage> {
                                     "Title",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color: Colors.black87,
+                                      fontSize: 16,
+                                      color: const Color.fromARGB(221, 255, 255, 255),
                                     ),
                                   ),
                                   TextFormField(
@@ -186,10 +201,11 @@ class _addImageState extends State<addImage> {
                                       ),
                                       hintText:
                                           'Tell others what your iamge is called',
-                                      labelStyle: TextStyle(
-                                          fontSize: 15,
+                                      hintStyle: TextStyle(
+                                        color:Color.fromARGB(255, 255, 255, 255),
+                                          fontSize: 12,
                                           fontWeight: FontWeight
-                                              .bold // ขนาดข้อความ Label Text
+                                              .w400 // ขนาดข้อความ Label Text
                                           ),
                                     ),
                                     validator: (value) {
@@ -210,8 +226,8 @@ class _addImageState extends State<addImage> {
                                     "Detail",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color: Colors.black87,
+                                      fontSize: 16,
+                                      color: const Color.fromARGB(221, 255, 255, 255),
                                     ),
                                   ),
                                   TextFormField(
@@ -221,10 +237,11 @@ class _addImageState extends State<addImage> {
                                         horizontal: 10,
                                       ),
                                       hintText: 'Add a detail to your iamge',
-                                      labelStyle: TextStyle(
-                                        fontSize: 15,
+                                      hintStyle: TextStyle(
+                                        color: const Color.fromARGB(221, 255, 255, 255),
+                                        fontSize: 12,
                                         fontWeight: FontWeight
-                                            .bold, // ขนาดข้อความ Label Text
+                                            .w400, // ขนาดข้อความ Label Text
                                       ),
                                     ),
                                     validator: (value) {
@@ -270,7 +287,7 @@ class _addImageState extends State<addImage> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                  Color.fromARGB(255, 255, 226, 145),
+                                  Color.fromARGB(255, 255, 255, 255),
                                 ), // เปลี่ยนสีปุ่มเป็นสีน้ำเงิน
                               ),
                               child: Text(
@@ -288,7 +305,7 @@ class _addImageState extends State<addImage> {
             ],
           ),
         ),
-      ),
+      ),backgroundColor: Color.fromARGB(255, 1, 37, 66),
     );
   }
 }

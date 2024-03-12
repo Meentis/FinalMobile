@@ -43,7 +43,7 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       body: mobileScreens[screenIndex],
       bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 255, 226, 145),
+        color: Color.fromARGB(255, 1, 37, 66),
         shape: CircularNotchedRectangle(),
         height: 60,
         child: Row(
@@ -121,7 +121,7 @@ class _MenuPageState extends State<MenuPage> {
           );
         },
         child: Icon(Icons.add_photo_alternate),
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         foregroundColor: Colors.white,
         elevation: 0,
         shape: CircleBorder(),
@@ -147,13 +147,14 @@ class _HomeState extends State<Home> {
         automaticallyImplyLeading: false,
         title: Text(
           'Home',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         actions: [
           IconButton(
             icon: Icon(Icons.logout_outlined),
+            color:Color.fromARGB(255, 255, 255, 255),
             onPressed: () {
               showDialog(
                 context: context,
@@ -295,13 +296,14 @@ class _ProfilePageState extends State<ProfilePage>
         automaticallyImplyLeading: false,
         title: Text(
           'Profile',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         actions: [
           IconButton(
             icon: Icon(Icons.logout_outlined),
+            color: const Color.fromARGB(255, 255, 255, 255),
             onPressed: () {
               showDialog(
                 context: context,
@@ -362,7 +364,7 @@ class _ProfilePageState extends State<ProfilePage>
                     height: 130,
                     decoration: BoxDecoration(
                       border: Border.all(
-                          width: 4, color: Color.fromARGB(255, 255, 226, 145)),
+                          width: 4, color:Color.fromARGB(255, 255, 255, 255),),
                       boxShadow: [
                         BoxShadow(
                           spreadRadius: 2,
@@ -487,7 +489,7 @@ class _ProfilePageState extends State<ProfilePage>
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                        backgroundColor: Color.fromARGB(255, 1, 37, 66),
                         side: BorderSide.none,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
@@ -496,7 +498,7 @@ class _ProfilePageState extends State<ProfilePage>
                       child: Text(
                         "Edit Profile",
                         style: TextStyle(
-                          color: Colors.black,
+                          color: const Color.fromARGB(255, 255, 255, 255),
                           fontSize: 18,
                         ),
                       ),
@@ -506,7 +508,7 @@ class _ProfilePageState extends State<ProfilePage>
                 Container(
                   child: TabBar(
                       controller: _tabController,
-                      indicatorColor: Colors.amber,
+                      indicatorColor: Color.fromARGB(255, 1, 37, 66),
                       tabs: [
                         Tab(
                           icon: Icon(
@@ -629,13 +631,15 @@ class _ManageImageState extends State<ManageImage> {
         automaticallyImplyLeading: false,
         title: Text(
           'Manage Images',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         actions: [
           IconButton(
             icon: Icon(Icons.logout_outlined),
+            color: const Color.fromARGB(255, 255, 255, 255),
+        
             onPressed: () {
               showDialog(
                 context: context,
@@ -781,7 +785,7 @@ class _ManageImageState extends State<ManageImage> {
             },
           );
         },
-      ),
+      ),backgroundColor:  Color.fromARGB(255, 255, 255, 255),
     );
   }
 }
@@ -806,13 +810,14 @@ class _UserFavorie extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           'Favorite',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         actions: [
           IconButton(
             icon: Icon(Icons.logout_outlined),
+            color:Color.fromARGB(255, 254, 255, 255),
             onPressed: () {
               showDialog(
                 context: context,

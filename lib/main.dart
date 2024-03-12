@@ -4,6 +4,8 @@ import 'package:milktea/login.dart';
 import 'package:milktea/menupage.dart';
 import 'package:milktea/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -17,30 +19,35 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-          child: Container(
+Widget build(BuildContext context) {
+  return Scaffold(
+    
+    body: SingleChildScrollView(        
+      child: Container(   
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-        child: Column(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 50),         
+        color: Color.fromARGB(255, 1, 37, 66), // เปลี่ยนสีพื้นหลังเป็นสีน้ำเงิน
+          
+          child: Column(        
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                Text(
-                  "Welcome",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+            SizedBox(
+                  height:1,
                 ),
-              ],
-            ),
+       
             Container(
-              height: MediaQuery.of(context).size.height / 3,
-              decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('img/logo.png'))),
-            ),
+                height: 250,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('img/n.png'),
+                    // fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            
+            
             Column(
               children: [
                 MaterialButton(
@@ -51,21 +58,22 @@ class HomePage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => LoginPage()));
                   },
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
+                      side: BorderSide(color: const Color.fromARGB(255, 255, 255, 255)),
                       borderRadius: BorderRadius.circular(50)),
                   child: Text(
                     "Login",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 30,color: const Color.fromARGB(255, 255, 255, 255)),
                   ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
                 Container(
+                  
                   padding: EdgeInsets.only(top: 3, left: 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: Colors.black)),
+                      border: Border.all(color: Color.fromARGB(255, 0, 0, 0))),
                   child: MaterialButton(
                     minWidth: double.infinity,
                     height: 60,
@@ -75,21 +83,26 @@ class HomePage extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => SignUpPage()));
                     },
-                    color: Color.fromARGB(255, 255, 226, 145),
+                    color: Color.fromARGB(255, 255, 255, 255),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50)),
                     child: Text(
                       "Sign Up",
                       style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 30),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 30,color: Color.fromARGB(255, 26, 26, 26)),
+                          
                     ),
                   ),
+                ),
+                 SizedBox(
+                  height:100,
                 ),
               ],
             )
           ],
-        ),
-      )),
+        ),       
+       )
+      ),
     );
   }
 }
