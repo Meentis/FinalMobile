@@ -24,10 +24,10 @@ class _LoginPageState extends State<LoginPage> {
               child: CircularProgressIndicator(),
             );
           });
-          
+
       try {
         await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
+            .signInWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         )
@@ -56,27 +56,21 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
-            color: Color.fromARGB(255, 255, 255, 255),
-            icon: Icon(Icons.arrow_back_ios_new_sharp),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      
-                    )
-                  ),
-                );// Handle menu button press
-             },
-          ),
-             
+          color: Color.fromARGB(255, 255, 255, 255),
+          icon: Icon(Icons.arrow_back_ios_new_sharp),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            ); // Handle menu button press
+          },
+        ),
         backgroundColor: Color.fromARGB(255, 1, 37, 66),
         elevation: 0,
-        
       ),
       body: SingleChildScrollView(
         child: Container(
-          color:Color.fromARGB(255, 1, 37, 66),
+          color: Color.fromARGB(255, 1, 37, 66),
           padding: EdgeInsets.symmetric(vertical: 60),
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
@@ -87,7 +81,12 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Text(
                     "Login",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50,color:Color.fromARGB(255, 255, 255, 255),),
+                    style: TextStyle(
+                      fontFamily: "DMSerif",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 50,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
                   ),
                 ],
               ),
@@ -112,22 +111,23 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             SizedBox(height: 5),
                             TextFormField(
-                              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255)),
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
                               obscureText: false,
-                             decoration: InputDecoration(
+                              decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                   vertical: 10,
                                   horizontal: 10,
                                 ),
                                 hintText: 'Enter your email',
                                 hintStyle: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight
-                                        .w400, // ขนาดข้อความ Label Text
-                                    color: Color.fromARGB(255, 196, 194, 194),
-                                    ),
+                                  fontSize: 12,
+                                  fontWeight:
+                                      FontWeight.w400, // ขนาดข้อความ Label Text
+                                  color: Color.fromARGB(255, 196, 194, 194),
+                                ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty)
@@ -153,7 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             TextFormField(
-                              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255)),
                               controller: passwordController,
                               obscureText: true,
                               decoration: InputDecoration(
@@ -163,11 +164,11 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 hintText: 'Enter your password',
                                 hintStyle: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight
-                                        .w400, // ขนาดข้อความ Label Text
-                                    color: Color.fromARGB(255, 196, 194, 194),  
-                                    ),
+                                  fontSize: 12,
+                                  fontWeight:
+                                      FontWeight.w400, // ขนาดข้อความ Label Text
+                                  color: Color.fromARGB(255, 196, 194, 194),
+                                ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty)
@@ -186,11 +187,15 @@ class _LoginPageState extends State<LoginPage> {
                                               builder: (context) =>
                                                   forgotPasswordPage()));
                                     },
-                                    child: Text('Forgot Password?',style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 10,
-                                      color: const Color.fromARGB(225, 255, 255, 255),
-                              ),)),
+                                    child: Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 10,
+                                        color: const Color.fromARGB(
+                                            225, 255, 255, 255),
+                                      ),
+                                    )),
                               ],
                             ),
                             SizedBox(height: 30),
@@ -222,13 +227,13 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     "Login",
                     style: TextStyle(
+                      fontFamily: "DMSerif",
                       fontWeight: FontWeight.w600,
                       fontSize: 30,
                     ),
                   ),
                 ),
               ),
-              
               SizedBox(height: 250),
             ],
           ),

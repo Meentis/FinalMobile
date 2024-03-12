@@ -29,21 +29,18 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            color: Color.fromARGB(255, 255, 255, 255),
-            icon: Icon(Icons.arrow_back_ios_new_sharp),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      
-                    )
-                  ),
-                );// Handle menu button press
-             },
-          ),
+          color: Color.fromARGB(255, 255, 255, 255),
+          icon: Icon(Icons.arrow_back_ios_new_sharp),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            ); // Handle menu button press
+          },
+        ),
         title: Center(
-          child: Text('Forgot Password', style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1))),
+          child: Text('Forgot Password',
+              style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1))),
         ),
         backgroundColor: Color.fromARGB(255, 1, 37, 66),
       ),
@@ -57,7 +54,10 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
               Text(
                 'Enter your email to get a password reset link',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontFamily: "DMSerif",
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -82,7 +82,8 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
                 },
                 child: Text(
                   'Reset Password',
-                  style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 255, 255, 255)),
                 ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 1, 37, 66)),

@@ -72,24 +72,20 @@ class _SignUpPageState extends State<SignUpPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
-        backgroundColor:Color.fromARGB(255, 1, 37, 66),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         leading: IconButton(
-            color: Color.fromARGB(255, 255, 255, 255),
-            icon: Icon(Icons.arrow_back_ios_new_sharp),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(
-                      
-                    )
-                  ),
-                );// Handle menu button press
-             },
-          ),
+          color: Color.fromARGB(255, 255, 255, 255),
+          icon: Icon(Icons.arrow_back_ios_new_sharp),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            ); // Handle menu button press
+          },
+        ),
       ),
       body: Container(
-        color:Color.fromARGB(255, 1, 37, 66),
+        color: Color.fromARGB(255, 1, 37, 66),
         padding: EdgeInsets.symmetric(vertical: 20),
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
@@ -101,7 +97,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Text(
                     "Sign Up",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,color:Color.fromARGB(255, 255, 255, 255),),
+                    style: TextStyle(
+                      fontFamily: "DMSerif",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
                   ),
                 ],
               ),
@@ -126,7 +127,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             TextFormField(
-                                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                                 controller: emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 obscureText: false,
@@ -137,11 +139,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                   ),
                                   hintText: 'Enter your Email',
                                   hintStyle: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight
-                                          .w400, // ขนาดข้อความ Label Text
-                                      color: Color.fromARGB(255, 196, 194, 194),  
-                                      ),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight
+                                        .w400, // ขนาดข้อความ Label Text
+                                    color: Color.fromARGB(255, 196, 194, 194),
+                                  ),
                                 ),
                                 validator: MultiValidator([
                                   EmailValidator(
@@ -168,7 +170,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             TextFormField(
-                                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                                 controller: usernameController,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -181,8 +184,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     fontSize: 12,
                                     fontWeight: FontWeight
                                         .w400, // ขนาดข้อความ Label Text
-                                    color: Color.fromARGB(255, 196, 194, 194),  
-                                    ),
+                                    color: Color.fromARGB(255, 196, 194, 194),
+                                  ),
                                 ),
                                 validator: RequiredValidator(
                                     errorText: "Please specify username.")),
@@ -204,7 +207,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             TextFormField(
-                                style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
                                 controller: passwordController,
                                 obscureText: true,
                                 decoration: InputDecoration(
@@ -217,8 +221,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                     fontSize: 12,
                                     fontWeight: FontWeight
                                         .w400, // ขนาดข้อความ Label Text
-                                    color: Color.fromARGB(255, 196, 194, 194),  
-                                    ),
+                                    color: Color.fromARGB(255, 196, 194, 194),
+                                  ),
                                 ),
                                 validator: MultiValidator([
                                   RequiredValidator(
@@ -246,7 +250,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                             TextFormField(
-                              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255)),
                               controller: confirmPasswordController,
                               obscureText: true,
                               decoration: InputDecoration(
@@ -256,11 +261,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 ),
                                 hintText: 'Enter your confirm password',
                                 hintStyle: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight
-                                        .w400, // ขนาดข้อความ Label Text
-                                    color: Color.fromARGB(255, 196, 194, 194),  
-                                    ),
+                                  fontSize: 12,
+                                  fontWeight:
+                                      FontWeight.w400, // ขนาดข้อความ Label Text
+                                  color: Color.fromARGB(255, 196, 194, 194),
+                                ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty)
@@ -300,6 +305,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Text(
                     "Sign Up",
                     style: TextStyle(
+                      fontFamily: "DMSerif",
                       color: Color.fromARGB(255, 0, 0, 0),
                       fontWeight: FontWeight.w600,
                       fontSize: 30,

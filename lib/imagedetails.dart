@@ -190,21 +190,15 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            color: Color.fromARGB(255, 255, 255, 255),
-            icon: Icon(Icons.arrow_back_ios_new_sharp),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MenuPage(screenIndex1: 1,
-
-                    )
-                  ),
-                );// Handle menu button press
-             },
-          ),
-        backgroundColor:Color.fromARGB(255, 1, 37, 66),
-        title: Text("Details",style: TextStyle(color:Color.fromARGB(255, 255, 255, 255))),
+          color: Color.fromARGB(255, 255, 255, 255),
+          icon: Icon(Icons.arrow_back_ios_new_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
+        title: Text("Details",
+            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
         centerTitle: true,
       ),
       body: isLoading
@@ -221,8 +215,9 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                             border: Border.all(
                               color: Colors.black,
                               width: 2.0,
-                              
-                                        ),color: Color.fromARGB(255, 1, 37, 66),// เพิ่มสีพื้นหลังสีเหลือง
+                            ),
+                            color: Color.fromARGB(
+                                255, 1, 37, 66), // เพิ่มสีพื้นหลังสีเหลือง
                             borderRadius: BorderRadius.circular(
                                 15), // เพิ่มเส้นขอบของ Container
                           ),
@@ -254,7 +249,8 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                                           userEmail,
                                           style: TextStyle(
                                               fontSize: 16,
-                                              color: Color.fromARGB(255, 255, 254, 254)),
+                                              color: Color.fromARGB(
+                                                  255, 255, 254, 254)),
                                         ),
                                       ],
                                     ),
@@ -268,7 +264,10 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                                     widget.imageUrl,
                                     fit: BoxFit.cover,
                                   ),
-                                ),SizedBox(height: 10,),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween, // จัดซ้าย
@@ -286,7 +285,10 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                                         ),
                                         Text(
                                           ' $detail',
-                                          style: TextStyle(fontSize: 20,color: Colors.white,),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -313,8 +315,10 @@ class _ImageDetailPageState extends State<ImageDetailPage> {
                                               } else {
                                                 return Text(
                                                   'Liked by: ${snapshot.data}',
-                                                  style:
-                                                      TextStyle(fontSize: 16,color: Colors.white,),
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.white,
+                                                  ),
                                                 );
                                               }
                                             },
