@@ -41,7 +41,7 @@ Widget build(BuildContext context) {
                 height: 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('img/n.png'),
+                    image: AssetImage('img/SAAA.png'),
                     // fit: BoxFit.cover,
                   ),
                 ),

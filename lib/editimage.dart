@@ -83,10 +83,11 @@ class _EditImageState extends State<EditImage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Edit Image"),
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        title: Text("Edit Image",style:TextStyle(color:Color.fromARGB(255, 255, 255, 255))),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
         leading: IconButton(
-          onPressed: () {
+          color: Color.fromARGB(255, 255, 255, 255),
+          onPressed: () {         
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -129,7 +130,7 @@ class _EditImageState extends State<EditImage> {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 15,
-                            color: Colors.black87,
+                            color:Color.fromARGB(255, 0, 0, 0),
                           ),
                         ),
                                                 TextFormField(
@@ -207,7 +208,7 @@ validator: (value) {
                           formKey.currentState?.reset();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                          backgroundColor: Color.fromARGB(255, 1, 37, 66),
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
@@ -215,7 +216,7 @@ validator: (value) {
                         ),
                         child: Text(
                           "CANCEL",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ),
                     ),
@@ -229,7 +230,7 @@ validator: (value) {
                           EditImage();
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 255, 226, 145),
+                          backgroundColor: Color.fromARGB(255, 1, 37, 66),
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
@@ -237,7 +238,7 @@ validator: (value) {
                         ),
                         child: Text(
                           "EDIT",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ),
                     ),
