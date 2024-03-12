@@ -83,11 +83,12 @@ class _EditImageState extends State<EditImage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Edit Image",style:TextStyle(color:Color.fromARGB(255, 255, 255, 255))),
+        title: Text("Edit Image",
+            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
         backgroundColor: Color.fromARGB(255, 1, 37, 66),
         leading: IconButton(
           color: Color.fromARGB(255, 255, 255, 255),
-          onPressed: () {         
+          onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -106,10 +107,15 @@ class _EditImageState extends State<EditImage> {
         padding: EdgeInsets.only(left: 15, top: 20, right: 15),
         child: ListView(
           children: [
-            Center(
-              child: Image.network(
-                widget.imageUrl,
-                fit: BoxFit.cover,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Container(
+                width: 400,
+                height: 400,
+                child: Image.network(
+                  widget.imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(
@@ -118,84 +124,84 @@ class _EditImageState extends State<EditImage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Title",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color:Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ),
-                                                TextFormField(
-                          controller: titleController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            hintText: 'Tell others what your iamge is called',
-                              labelStyle: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight:
-                                      FontWeight.bold // ขนาดข้อความ Label Text
+                key: formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Title",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Color.fromARGB(255, 0, 0, 0),
                             ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty)
-                              return 'Please input your title';
-                          },
-                        ),
-                        SizedBox(height: 30),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Detail",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                            color: Colors.black87,
-                          ),
-                        ),
-                                                TextFormField(
-                          maxLength: 30,
-                          controller: detailController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            hintText: 'Add a detail to your iamge',
+                          TextFormField(
+                            controller: titleController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Tell others what your iamge is called',
                               labelStyle: TextStyle(
                                   fontSize: 15,
                                   fontWeight:
                                       FontWeight.bold // ขนาดข้อความ Label Text
                                   ),
+                            ),
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Please input your title';
+                            },
                           ),
-validator: (value) {
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Detail",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          TextFormField(
+                            maxLength: 30,
+                            controller: detailController,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 10,
+                              ),
+                              hintText: 'Add a detail to your iamge',
+                              labelStyle: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight:
+                                      FontWeight.bold // ขนาดข้อความ Label Text
+                                  ),
+                            ),
+                            validator: (value) {
                               if (value!.isEmpty)
                                 return "Please add a detail to the iamge";
                             },
-                        ),
-                                              ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 30),
-                ],
+                    SizedBox(height: 30),
+                  ],
+                ),
               ),
             ),
-),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
@@ -216,7 +222,8 @@ validator: (value) {
                         ),
                         child: Text(
                           "CANCEL",
-                          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ),
                     ),
@@ -238,7 +245,8 @@ validator: (value) {
                         ),
                         child: Text(
                           "EDIT",
-                          style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 255, 255, 255)),
                         ),
                       ),
                     ),

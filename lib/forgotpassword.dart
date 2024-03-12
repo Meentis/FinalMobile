@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:milktea/main.dart';
 
 class forgotPasswordPage extends StatefulWidget {
   const forgotPasswordPage({super.key});
@@ -27,10 +28,24 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            color: Color.fromARGB(255, 255, 255, 255),
+            icon: Icon(Icons.arrow_back_ios_new_sharp),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(
+                      
+                    )
+                  ),
+                );// Handle menu button press
+             },
+          ),
         title: Center(
-          child: Text('Forgot Password', style: TextStyle(color: Colors.black)),
+          child: Text('Forgot Password', style: TextStyle(color: Color.fromRGBO(255, 255, 255, 1))),
         ),
-        backgroundColor: Color.fromARGB(255, 255, 226, 145),
+        backgroundColor: Color.fromARGB(255, 1, 37, 66),
       ),
       body: Container(
         margin: EdgeInsets.all(20),
@@ -67,10 +82,10 @@ class _forgotPasswordPageState extends State<forgotPasswordPage> {
                 },
                 child: Text(
                   'Reset Password',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
                 ),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 255, 226, 145)),
+                    backgroundColor: Color.fromARGB(255, 1, 37, 66)),
               )
             ],
           ),

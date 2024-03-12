@@ -41,8 +41,6 @@ class _addImageState extends State<addImage> {
     final picker = ImagePicker();
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
-      maxHeight: 300, // กำหนดความสูงสูงสุดของรูปภาพ
-      maxWidth: 250, // กำหนดความกว้างสูงสุดของรูปภาพ
     );
 
     setState(() {
@@ -163,7 +161,14 @@ class _addImageState extends State<addImage> {
                           children: [
                             SizedBox(height: 20),
                             _imageFile != null
-                                ? Image.file(_imageFile!)
+                              ? Container(
+                                    height: 400,
+                                    width: 300,
+                                    child: Image.file(
+                                      _imageFile!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
                                 : Text('No image selected.',style:TextStyle(color: Color.fromARGB(255, 255, 255, 255)),),
                             SizedBox(height: 20),
                             ElevatedButton(
@@ -193,6 +198,7 @@ class _addImageState extends State<addImage> {
                                     ),
                                   ),
                                   TextFormField(
+                                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                                     controller: titlController,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
@@ -231,6 +237,7 @@ class _addImageState extends State<addImage> {
                                     ),
                                   ),
                                   TextFormField(
+                                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                                     controller: detailController,
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
