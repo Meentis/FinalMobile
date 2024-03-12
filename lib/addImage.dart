@@ -124,9 +124,11 @@ class _addImageState extends State<addImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text('Upload Image '),
+        title: Text(
+          'Upload Image',
+          style: TextStyle(color: Colors.black),
         ),
+        centerTitle: true,
         backgroundColor: Color.fromARGB(255, 255, 226, 145),
       ),
       body: SingleChildScrollView(
@@ -168,7 +170,7 @@ class _addImageState extends State<addImage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "ชื่อ",
+                                    "Title",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
@@ -183,7 +185,7 @@ class _addImageState extends State<addImage> {
                                         vertical: 10,
                                       ),
                                       hintText:
-                                          'บอกผู้อื่นว่ารูปภาพของคุณชื่ออะไร',
+                                          'Tell others what your iamge is called',
                                       labelStyle: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight
@@ -192,7 +194,7 @@ class _addImageState extends State<addImage> {
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty)
-                                        return "กรุณาเพิ่มชื่อรูปภาพ";
+                                        return "Please add a Title to the iamge";
                                     },
                                   ),
                                 ],
@@ -205,7 +207,7 @@ class _addImageState extends State<addImage> {
                                 children: [
                                   SizedBox(width: 20),
                                   Text(
-                                    "คำอธิบาย",
+                                    "Detail",
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
@@ -218,8 +220,7 @@ class _addImageState extends State<addImage> {
                                       contentPadding: EdgeInsets.symmetric(
                                         horizontal: 10,
                                       ),
-                                      hintText:
-                                          'เพิ่มคำอธิบายที่กับรูปภาพของคุณ',
+                                      hintText: 'Add a detail to your iamge',
                                       labelStyle: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight
@@ -228,7 +229,7 @@ class _addImageState extends State<addImage> {
                                     ),
                                     validator: (value) {
                                       if (value!.isEmpty)
-                                        return "กรุณาเพิ่มคำอธิบายรูปภาพ";
+                                        return "Please add a detail to the iamge";
                                     },
                                   ),
                                 ],
@@ -243,14 +244,18 @@ class _addImageState extends State<addImage> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Text("แจ้งเตือน"),
-                                          content: Text("กรุณาเพิ่มรูปภาพ"),
+                                          title: Text("Alert",
+                                              style: TextStyle(fontSize: 29)),
+                                          content: Text(
+                                            "Please add a image",
+                                            style: TextStyle(fontSize: 20),
+                                          ),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
                                                 Navigator.of(context).pop();
                                               },
-                                              child: Text("ตกลง"),
+                                              child: Text("Confirm"),
                                             ),
                                           ],
                                         );

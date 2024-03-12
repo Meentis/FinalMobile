@@ -159,13 +159,13 @@ class _HomeState extends State<Home> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('คุณต้องการออกหรือไม่?'),
+                    title: Text('Do you want to logout?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // ปิดกล่องข้อความ
                         },
-                        child: Text('ยกเลิก'),
+                        child: Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -173,9 +173,9 @@ class _HomeState extends State<Home> {
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
-                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการออก
+                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการlogout
                         },
-                        child: Text('ออก'),
+                        child: Text('logout'),
                       ),
                     ],
                   );
@@ -307,13 +307,13 @@ class _ProfilePageState extends State<ProfilePage>
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('คุณต้องการออกหรือไม่?'),
+                    title: Text('Do you want to logout?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // ปิดกล่องข้อความ
                         },
-                        child: Text('ยกเลิก'),
+                        child: Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -322,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage>
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
-                        child: Text('ออก'),
+                        child: Text('logout'),
                       ),
                     ],
                   );
@@ -520,11 +520,12 @@ class _ProfilePageState extends State<ProfilePage>
                       ]),
                 ),
                 Container(
-                  width: double.maxFinite,
-                  height: 353,
-                  child: TabBarView(
+                  child: Expanded(
+                    child: TabBarView(
                       controller: _tabController,
-                      children: [UserPost(), UserFavorie()]),
+                      children: [UserPost(), UserFavorie()],
+                    ),
+                  ),
                 )
               ],
             );
@@ -549,6 +550,35 @@ class _ManageImageState extends State<ManageImage> {
     super.initState();
     // Get current user's email
     currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
+  }
+
+  void showDeleteDialog(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm deletion'),
+          content: Text('Are you sure you want to delete this Image'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // ปิดกล่องข้อความ
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                deleteImage(
+                    imageUrl); // เรียกใช้ฟังก์ชัน deleteImage เมื่อต้องการลบ
+                Navigator.of(context)
+                    .pop(); // ปิดกล่องข้อความหลังจากลบเสร็จสิ้น
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void deleteImage(String imageUrl) async {
@@ -611,13 +641,13 @@ class _ManageImageState extends State<ManageImage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('คุณต้องการออกหรือไม่?'),
+                    title: Text('Do you want to logout?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // ปิดกล่องข้อความ
                         },
-                        child: Text('ยกเลิก'),
+                        child: Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -625,9 +655,9 @@ class _ManageImageState extends State<ManageImage> {
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
-                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการออก
+                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการlogout
                         },
-                        child: Text('ออก'),
+                        child: Text('logout'),
                       ),
                     ],
                   );
@@ -731,7 +761,8 @@ class _ManageImageState extends State<ManageImage> {
                           ),
                           IconButton(
                             onPressed: () {
-                              deleteImage(imageUrl); // Delete button pressed
+                              showDeleteDialog(imageUrl);
+                              // Delete button pressed
                             },
                             icon: Icon(
                               Icons.delete,
@@ -784,13 +815,13 @@ class _UserFavorie extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('คุณต้องการออกหรือไม่?'),
+                    title: Text('Do you want to logout?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // ปิดกล่องข้อความ
                         },
-                        child: Text('ยกเลิก'),
+                        child: Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -798,9 +829,9 @@ class _UserFavorie extends StatelessWidget {
                             context,
                             MaterialPageRoute(builder: (context) => HomePage()),
                           );
-                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการออก
+                          // เพิ่มโค้ดที่ต้องการเมื่อคุณต้องการlogout
                         },
-                        child: Text('ออก'),
+                        child: Text('logout'),
                       ),
                     ],
                   );
